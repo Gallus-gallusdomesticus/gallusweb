@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -55,6 +55,17 @@ class TestHTMLNode(unittest.TestCase):
         # Assert that the actual repr string matches the expected one
         self.assertEqual(repr(node), expected_repr)
  
+
+
+class TestLeafNode(unittest.TestCase):
+    def test_leaf_to_html_p(self):
+        node = LeafNode("p", "Hello, world!")
+        self.assertEqual(node.to_html(), "<p>Hello, world!</p>")
+
+    def test_leaf_to_html_all(self):
+        node = LeafNode("a","Hello man!",{"href": "https://test.com", "testing": "http://testing123.com"})
+        self.assertEqual(node.to_html(), '<a href="https://test.com" testing="http://testing123.com">Hello man!</a>')
+
 
 
 

@@ -9,17 +9,17 @@ class TestTextNode(unittest.TestCase):
         node2 = TextNode("This is a text node", TextType.BOLD)
         self.assertEqual(node, node2)
         
-    def test_eq2(self):    
+    def test_neq(self):    
         node3 = TextNode("This is a text node", TextType.LINKS)
         node4 = TextNode("This is a text node", TextType.IMAGES)
         self.assertNotEqual(node3, node4)
         
-    def test_eq3(self):   
+    def test_neq2(self):   
         node4 = TextNode("This is a text node", TextType.ITALIC, "bootdev.com")
         node5 = TextNode("This is a text node", TextType.ITALIC, "bootdev.co")
         self.assertNotEqual(node4, node5)
         
-    def test_eq4(self):    
+    def test_eq2(self):    
         node6 = TextNode("This is a text node", TextType.NORMAL)
         node7 = TextNode("This is a text node", TextType.NORMAL, None)
         self.assertEqual(node6, node7)
