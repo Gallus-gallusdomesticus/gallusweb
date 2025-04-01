@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -65,6 +65,32 @@ class TestLeafNode(unittest.TestCase):
     def test_leaf_to_html_all(self):
         node = LeafNode("a","Hello man!",{"href": "https://test.com", "testing": "http://testing123.com"})
         self.assertEqual(node.to_html(), '<a href="https://test.com" testing="http://testing123.com">Hello man!</a>')
+
+
+class TestParentNode(unittest.TestCase):
+    def test_to_html_with_children(self):
+        child_node = LeafNode("span", "child")
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(parent_node.to_html(), "<div><span>child</span></div>")
+
+    def test_to_html_with_grandchildren(self):
+        grandchild_node = LeafNode("b", "grandchild")
+        child_node = ParentNode("span", [grandchild_node])
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(
+            parent_node.to_html(),
+            "<div><span><b>grandchild</b></span></div>",
+        )
+
+    def test_to_html_with_grandgrandchildren(self):
+        grandgrandchild_node = LeafNode("a", "grandgrandchild", {"key_d":"guya.moe"})
+        grandchild_node = ParentNode("b", [grandgrandchild_node], {"key_c":"http"})
+        child_node = ParentNode("span", [grandchild_node], {"key_b":"https"})
+        parent_node = ParentNode("div", [child_node], {"key_a": "www"})     
+        self.assertEqual(
+            parent_node.to_html(),
+            '<div key_a="www"><span key_b="https"><b key_c="http"><a key_d="guya.moe">grandgrandchild</a></b></span></div>',
+        )
 
 
 

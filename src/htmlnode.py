@@ -22,9 +22,9 @@ class HTMLNode:
 
 
 class LeafNode(HTMLNode):
-    def __init__(self, tag=None, value=None, props=None):
-        super().__init__(tag, value, props)
-        self.props=props
+    def __init__(self, tag, value, props=None):
+        super().__init__(tag, value, None, props)
+        
  
 
     def to_html(self):
@@ -34,14 +34,7 @@ class LeafNode(HTMLNode):
         if self.tag==None or self.tag=="":
             return self.value
         
-
-        if self.props==None or self.props=={}:
-            return f"<{self.tag}>{self.value}</{self.tag}>"
-
-        text=""
-        for key in self.props:
-            text+=f' {key}="{self.props[key]}"'
-        return f'<{self.tag}{text}>{self.value}</{self.tag}>'
+        return f'<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>'
 
 
 
@@ -51,4 +44,28 @@ class LeafNode(HTMLNode):
     def __repr__(self):
         return f"LeafNode({self.tag}, {self.value}, {self.props})"
 
+
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag, None, children, props)
+        self.children=children
+
+    def to_html(self):
+        if self.tag==None or self.tag=="":
+            raise ValueError("ParentNode must have tag")
+    
+        if self.children==None or self.children==[]:
+            raise ValueError("ParentNode must have children")
+
+        loop_word=f"<{self.tag}{self.props_to_html()}>"
+        for key in self.children:
+            loop_word+=key.to_html()
+        return loop_word+f"</{self.tag}>"
+
+    def __eq__(self, other):
+        return self.tag==other.tag and self.children==other.children and self.props==other.props
+
+    def __repr__(self):
+        return f"ParentNode({self.tag}, {self.children}, {self.props})"
+        
 
