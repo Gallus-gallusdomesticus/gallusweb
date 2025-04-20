@@ -2,12 +2,12 @@ print("hello world")
 
 from textnode import TextNode, TextType
 from copystatic import copy_static
-from generatepage import generate_page
+from generatepage import generate_page,generate_pages_recursive
 
 def main():
     print(TextNode("test", TextType.LINKS, "https://www.boot.dev"))
     copy_static("./static", "./public")
-    generate_page("./content/index.md", "template.html", "./public/index.html")
+    generate_pages_recursive("./content", "./template.html", "./public")
 
 
 main()
