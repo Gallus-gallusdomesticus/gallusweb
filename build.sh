@@ -1,1 +1,1 @@
-python3 src/main.py "https://github.com/Gallus-gallusdomesticus/gallusweb.git"
+python3 src/main.py "/gallusweb/"
