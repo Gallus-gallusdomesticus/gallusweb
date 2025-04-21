@@ -5,7 +5,8 @@ from htmlnode import ParentNode
 from pathlib import Path
 import os
 
-def generate_page(from_path, template_path, dest_path):
+
+def generate_page(from_path, template_path, dest_path, basepath):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     
     if os.path.exists(from_path)==False:
@@ -27,12 +28,14 @@ def generate_page(from_path, template_path, dest_path):
     title=extract_title(markdown_file)
     template_file=template_file.replace("{{ Title }}", title)
     template_file=template_file.replace("{{ Content }}", html_from_markdown)
+    template_file=template_file.replace('href="/', f'href="{basepath}')
+    template_file=template_file.replace('src="/', f'src="{basepath}')
 
     with open(dest_path, "w") as dest_file:
         dest_file.write(template_file)
 
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     p=Path(dir_path_content) #make the path files
     markdown_list=list(p.glob("*.md"))  #make the list of the path
     list_dir=os.listdir(dir_path_content)
@@ -52,7 +55,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
         html_name=markdown_filename.replace(".md", ".html")
             
         combined_markdown_destination=os.path.join(dest_dir_path, html_name)
-        generate_page(markdown_path, template_path, combined_markdown_destination)
+        generate_page(markdown_path, template_path, combined_markdown_destination, basepath)
 
     #process the directories
     for dir in list_dir:
@@ -60,7 +63,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
         
         if os.path.isdir(combined_directory)==True:
             combined_markdown_destination=os.path.join(dest_dir_path,dir)
-            generate_pages_recursive(combined_directory,template_path, combined_markdown_destination)
+            generate_pages_recursive(combined_directory,template_path, combined_markdown_destination, basepath)
         
         
 
