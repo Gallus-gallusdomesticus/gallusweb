@@ -15,8 +15,8 @@ else:
 
 def main():
     print(TextNode("test", TextType.LINKS, "https://www.boot.dev"))
-    copy_static("./static", "./public")
-    generate_pages_recursive("./content", "./template.html", "./public", base)
+    copy_static("./static", "./docs")
+    generate_pages_recursive("./content", "./template.html", "./docs", base)
 
 
 main()
